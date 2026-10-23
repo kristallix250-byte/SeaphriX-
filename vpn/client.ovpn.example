@@ -1,0 +1,25 @@
+client
+dev tun
+proto udp
+remote vpn.example.com 1194
+resolv-retry infinite
+nobind
+persist-key
+persist-tun
+remote-cert-tls server
+cipher AES-256-GCM
+auth SHA256
+tls-version-min 1.2
+verb 3
+# DNS-Leak-Schutz
+dhcp-option DNS 10.8.0.1
+block-outside-dns
+redirect-gateway def1 ipv6
+<ca>
+</ca>
+<cert>
+</cert>
+<key>
+</key>
+<tls-crypt>
+</tls-crypt>
