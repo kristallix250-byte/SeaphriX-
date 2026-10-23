@@ -1,0 +1,16 @@
+# WireGuard-Client. Schlüssel erzeugen: wg genkey | tee private.key | wg pubkey > public.key
+[Interface]
+PrivateKey = <CLIENT_PRIVATE_KEY>
+Address = 10.8.0.2/24
+# DNS-Leak-Schutz: nur DNS des VPN verwenden
+DNS = 10.8.0.1
+# Kill-Switch: Verkehr außerhalb des Tunnels blockieren
+PostUp = iptables -I OUTPUT ! -o %i -m mark ! --mark $(wg show %i fwmark) -m addrtype ! --dst-type LOCAL -j REJECT
+PreDown = iptables -D OUTPUT ! -o %i -m mark ! --mark $(wg show %i fwmark) -m addrtype ! --dst-type LOCAL -j REJECT
+
+[Peer]
+PublicKey = <SERVER_PUBLIC_KEY>
+PresharedKey = <PRESHARED_KEY>
+Endpoint = vpn.example.com:51820
+AllowedIPs = 0.0.0.0/0, ::/0
+PersistentKeepalive = 25

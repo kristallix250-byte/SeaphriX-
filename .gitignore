@@ -1,0 +1,5 @@
+vpn/wireguard/
+vpn/openvpn-data/
+vpn/*.conf
+vpn/*.ovpn
+.env

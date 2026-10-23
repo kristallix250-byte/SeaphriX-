@@ -1,0 +1,68 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: saephrix
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD setzen}
+      POSTGRES_DB: saephrix
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U saephrix"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    env_file: ./backend/.env
+    environment:
+      DATABASE_URL: postgres://saephrix:${POSTGRES_PASSWORD}@db:5432/saephrix
+      OLLAMA_BASE_URL: http://ollama:11434
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:3000:3000"
+    deploy:
+      resources:
+        limits: { cpus: "1.0", memory: 512M }
+
+  ollama:
+    image: ollama/ollama:latest
+    restart: unless-stopped
+    volumes:
+      - ollama:/root/.ollama
+    profiles: ["local-ai"]
+
+  wireguard:
+    image: lscr.io/linuxserver/wireguard:latest
+    restart: unless-stopped
+    cap_add: [NET_ADMIN]
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: Europe/Berlin
+    volumes:
+      - ./vpn/wireguard:/config
+    ports:
+      - "51820:51820/udp"
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    profiles: ["vpn"]
+
+  openvpn:
+    image: kylemanna/openvpn:latest
+    restart: unless-stopped
+    cap_add: [NET_ADMIN]
+    volumes:
+      - ./vpn/openvpn-data:/etc/openvpn
+    ports:
+      - "1194:1194/udp"
+    profiles: ["vpn"]
+
+volumes:
+  pgdata:
+  ollama:
