@@ -10,3 +10,10 @@ go test ./...
 go run ./backend/cmd        # http://127.0.0.1:8080/health
 docker build -f docker/Dockerfile -t saephrix .
 ```
+
+`POST /api/motivation` erwartet genau ein JSON-Objekt mit den Pflichtfeldern
+`autonomy`, `competence` und `relatedness` (Zahlen von 0 bis 1 einschließlich).
+`project` ist optional. Fehlende Werte, `null`, unbekannte Felder und zusätzliche
+JSON-Werte werden mit HTTP 400 abgelehnt; Anfragen über 64 KiB mit HTTP 413.
+Der Server begrenzt Header auf 5 Sekunden, Lesen und Schreiben auf je 15 Sekunden
+und ungenutzte Keep-alive-Verbindungen auf 60 Sekunden.
