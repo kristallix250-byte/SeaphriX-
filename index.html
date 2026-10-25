@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SÆPHRiX – Webseiten, Tools & Content</title>
+<meta name="robots" content="noindex, nofollow">
 <meta name="description" content="SÆPHRiX baut Webseiten, Tools und Content für Firmen – mit Fokus auf freie Werkstätten und die Automobilbranche.">
 <style>
 :root{
@@ -12,7 +13,13 @@
   --serif:'Cinzel','Trajan Pro','Optima','Palatino Linotype',Georgia,serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+:focus-visible{outline:3px solid var(--gold);outline-offset:4px}
+.skip{position:absolute;left:12px;top:-100px;z-index:20;background:var(--bg);padding:12px}
+.skip:focus{top:12px}
+fieldset{border:0;padding:0;min-width:0;display:grid;gap:16px}
+button:disabled{cursor:not-allowed;opacity:.65}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
 body{background:radial-gradient(1200px 700px at 85% -10%,rgba(124,82,214,.28),transparent 60%),radial-gradient(900px 600px at -10% 30%,rgba(40,90,220,.22),transparent 60%),radial-gradient(1px 1px at 20% 30%,#fff8,transparent),radial-gradient(1px 1px at 70% 15%,#fff9,transparent),radial-gradient(1.5px 1.5px at 40% 70%,#ffe6a8aa,transparent),radial-gradient(1px 1px at 85% 55%,#fff7,transparent),radial-gradient(1px 1px at 10% 85%,#fff8,transparent),radial-gradient(1.5px 1.5px at 60% 45%,#fff6,transparent),linear-gradient(180deg,#0a0e2a,#070920);background-attachment:fixed;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
 a{color:inherit}
 .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
@@ -116,8 +123,9 @@ footer a:hover{color:var(--text)}
 </style>
 </head>
 <body>
+<a class="skip" href="#inhalt">Zum Inhalt</a>
 
-<nav>
+<nav aria-label="Hauptnavigation">
   <div class="wrap">
     <a href="#" class="logo"><b>SÆPHRIX</b><small>Webseiten · Tools · Content</small></a>
     <ul>
@@ -130,6 +138,7 @@ footer a:hover{color:var(--text)}
   </div>
 </nav>
 
+<main id="inhalt">
 <header class="hero">
   <div class="wrap">
     <div>
@@ -182,16 +191,16 @@ footer a:hover{color:var(--text)}
 <section id="werkstatt">
   <div class="wrap split">
     <div>
-      <span class="tag">Für Werkstätten</span>
+      <span class="tag">Für Werkstätten · in Entwicklung</span>
       <div class="head" style="margin-bottom:0">
         <h2>Das Werkstatt-Tool</h2>
-        <p>Schluss mit Zetteln und Excel-Listen. Lager, Kunden, Lieferanten und Finanzen an einem Ort, mit einer KI, die mitarbeitet.</p>
+        <p>Geplant ist eine gemeinsame Oberfläche für Lager, Kunden, Lieferanten und Finanzen mit KI-Unterstützung. Die folgenden Funktionen beschreiben den Entwicklungsumfang; ihre Verfügbarkeit muss vor einem Angebot geprüft werden.</p>
       </div>
       <div class="plans">
         <div class="plan"><b>Basis</b><p>Bestand, Kunden, Lieferanten und Finanzen</p></div>
         <div class="plan"><b>Plus</b><p>Alles aus Basis, mehr KI-Zeit und Lohn-Anbindung</p></div>
       </div>
-      <p class="small" style="margin-top:14px">Als monatliches Abo. Werkstätten, die das Tool vorab testen wollen, können sich jetzt melden.</p>
+      <p class="small" style="margin-top:14px">Geplantes Abo-Modell. Preise, Testzugang und Leistungsumfang sind noch nicht freigegeben.</p>
     </div>
     <div class="features">
       <div class="feat"><b>Bestandsliste</b><span>Sieh sofort, was vorrätig ist und was nachbestellt werden muss.</span></div>
@@ -224,18 +233,21 @@ footer a:hover{color:var(--text)}
   <div class="wrap contact">
     <div class="head">
       <h2>Lass uns loslegen</h2>
-      <p>Schreib mir, was du brauchst. Die Anfrage ist kostenlos und unverbindlich, du bekommst schnell eine Antwort.</p>
+      <p>Die Anfrage ist kostenlos und unverbindlich. Das Formular wird nach Prüfung des Empfangs und der Datenschutzangaben freigeschaltet.</p>
     </div>
-    <form name="anfrage" method="POST" action="/danke.html" data-netlify="true" netlify-honeypot="bot-field">
+    <form aria-describedby="kontakt-status" name="anfrage" method="POST" action="/danke.html" data-netlify="true" netlify-honeypot="bot-field">
+      <p id="kontakt-status" role="status">Das Kontaktformular ist derzeit nicht freigeschaltet. Es werden keine Formulareingaben übermittelt.</p>
+      <fieldset disabled>
+      <legend>Anfrage (derzeit nicht verfügbar)</legend>
       <input type="hidden" name="form-name" value="anfrage">
-      <p class="hidden"><label>Nicht ausfüllen: <input name="bot-field"></label></p>
+      <p class="hidden"><label>Nicht ausfüllen: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
       <div class="row">
-        <label>Name<input name="name" required autocomplete="name"></label>
-        <label>Firma<input name="firma" autocomplete="organization"></label>
+        <label>Name<input name="name" maxlength="120" required autocomplete="name"></label>
+        <label>Firma<input name="firma" maxlength="160" autocomplete="organization"></label>
       </div>
       <div class="row">
-        <label>E-Mail<input type="email" name="email" required autocomplete="email"></label>
-        <label>Telefon<input type="tel" name="telefon" autocomplete="tel"></label>
+        <label>E-Mail<input type="email" name="email" maxlength="254" required autocomplete="email"></label>
+        <label>Telefon<input type="tel" name="telefon" maxlength="60" autocomplete="tel"></label>
       </div>
       <label>Worum geht's?
         <select name="thema">
@@ -246,16 +258,18 @@ footer a:hover{color:var(--text)}
           <option>Etwas anderes</option>
         </select>
       </label>
-      <label>Nachricht<textarea name="nachricht" required></textarea></label>
+      <label>Nachricht<textarea name="nachricht" maxlength="5000" required></textarea></label>
       <label style="display:flex;gap:10px;align-items:flex-start;grid-template-columns:none">
         <input type="checkbox" name="datenschutz" required style="width:auto;margin-top:4px">
-        <span>Ich bin einverstanden, dass meine Angaben zur Bearbeitung der Anfrage gespeichert werden. Mehr dazu im <a href="datenschutz.html">Datenschutz</a>.</span>
+        <span>Ich habe die Hinweise zur Bearbeitung meiner Anfrage gelesen. Mehr dazu im <a href="datenschutz.html">Datenschutz</a>.</span>
       </label>
-      <button class="btn" type="submit">Anfrage senden</button>
+      <button class="btn" type="submit" disabled>Anfrage derzeit nicht verfügbar</button>
+      </fieldset>
     </form>
   </div>
 </section>
 
+</main>
 <footer>
   <div class="wrap">
     <span>© <span id="y"></span> SÆPHRIX Industries</span>
